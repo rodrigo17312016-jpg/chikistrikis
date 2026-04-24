@@ -249,7 +249,7 @@
     position: relative;
     display: inline-block;
     margin-bottom: 30px;
-    padding: 15px 30px;
+    padding: 25px 50px;
   }
   .hero-name {
     font-family: 'Great Vibes', cursive;
@@ -294,20 +294,21 @@
     50% { transform: translateY(-6px) translateZ(0); }
   }
 
-  /* Sparkles femeninos alrededor de Evenly */
+  /* Sparkles femeninos alrededor de Evenly — ALEJADOS del texto */
   .sparkle {
     position: absolute;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     pointer-events: none;
     animation: sparkleFloat 3s ease-in-out infinite;
     filter: drop-shadow(0 0 8px rgba(255,182,193,0.8));
+    z-index: 3;
   }
-  .sparkle-1 { top: -5px; left: -10px; animation-delay: 0s; }
-  .sparkle-2 { top: 10px; right: -15px; animation-delay: 0.8s; font-size: 1.8rem; }
-  .sparkle-3 { bottom: 5px; left: 10px; animation-delay: 1.6s; font-size: 1.3rem; }
-  .sparkle-4 { bottom: -5px; right: 0px; animation-delay: 2.2s; }
-  .sparkle-5 { top: 45%; left: -25px; animation-delay: 1.2s; font-size: 1.4rem; }
-  .sparkle-6 { top: 50%; right: -20px; animation-delay: 0.4s; font-size: 1.4rem; }
+  .sparkle-1 { top: -10px; left: -30px; animation-delay: 0s; }
+  .sparkle-2 { top: -15px; right: -30px; animation-delay: 0.8s; font-size: 1.6rem; }
+  .sparkle-3 { bottom: -10px; left: -15px; animation-delay: 1.6s; font-size: 1.2rem; }
+  .sparkle-4 { bottom: -15px; right: -20px; animation-delay: 2.2s; }
+  .sparkle-5 { top: 50%; left: -45px; animation-delay: 1.2s; font-size: 1.3rem; }
+  .sparkle-6 { top: 50%; right: -45px; animation-delay: 0.4s; font-size: 1.3rem; }
 
   @keyframes sparkleFloat {
     0%, 100% {
@@ -362,16 +363,43 @@
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    color: var(--dorado-suave);
-    font-size: 0.85rem;
+    color: var(--azul-noche);
+    font-size: 0.95rem;
+    font-weight: 700;
     letter-spacing: 2px;
-    animation: floatDown 2s ease-in-out infinite;
     text-align: center;
+    padding: 16px 38px;
+    background: linear-gradient(135deg, var(--dorado) 0%, var(--dorado-suave) 50%, var(--coral) 100%);
+    border-radius: 50px;
+    box-shadow:
+      0 10px 30px rgba(245,196,94,0.5),
+      0 0 50px rgba(245,196,94,0.3),
+      inset 0 2px 0 rgba(255,255,255,0.4);
+    animation: pulseBtn 2s ease-in-out infinite;
+    cursor: pointer;
+    user-select: none;
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .scroll-hint:hover, .scroll-hint:active {
+    background: rgba(245,196,94,0.15) !important;
+    transform: translateX(-50%) scale(1.08) !important;
   }
   .scroll-hint .arrow {
-    display: block;
-    font-size: 1.5rem;
-    margin-top: 5px;
+    display: inline-block;
+    font-size: 1.2rem;
+    margin-top: 0;
+    animation: arrowBounce 1.2s ease-in-out infinite;
+  }
+  @keyframes pulseBtn {
+    0%, 100% { box-shadow: 0 10px 30px rgba(245,196,94,0.5), 0 0 50px rgba(245,196,94,0.3), inset 0 2px 0 rgba(255,255,255,0.4); }
+    50% { box-shadow: 0 15px 45px rgba(245,196,94,0.7), 0 0 80px rgba(245,196,94,0.5), inset 0 2px 0 rgba(255,255,255,0.4); }
+  }
+  @keyframes arrowBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
   }
   @keyframes floatDown {
     0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
@@ -1323,7 +1351,7 @@
   (function makeConfetti() {
     const container = document.getElementById('confetti');
     const colors = ['#f5c45e', '#ff6b9d', '#4ecdc4', '#ffe082', '#ffffff'];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 15; i++) {
       const c = document.createElement('div');
       c.className = 'confetti';
       c.style.left = Math.random() * 100 + '%';
