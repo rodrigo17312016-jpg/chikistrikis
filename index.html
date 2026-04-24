@@ -256,7 +256,12 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 20px;
+    margin-bottom: 60px;
+  }
+  /* Cuando hay subtitulo, reducir margen del titulo */
+  .section-title + .section-sub {
+    margin-top: -45px;
+    margin-bottom: 50px;
   }
   .section-sub {
     text-align: center;
@@ -264,9 +269,10 @@
     font-size: 1rem;
     letter-spacing: 4px;
     text-transform: uppercase;
-    margin-bottom: 50px;
     opacity: 0.85;
   }
+  /* La galería necesita un padding más generoso arriba para que el título no aparezca solito */
+  #galeria { padding-top: 140px; }
 
   /* --- Sección Video --- */
   .video-section {
@@ -624,8 +630,10 @@
     .scroll-hint .arrow { font-size: 1.2rem; }
 
     /* Section títulos */
-    .section-title { font-size: 2.2rem; line-height: 1.15; padding: 0 10px; }
-    .section-sub { font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 35px; }
+    .section-title { font-size: 2.2rem; line-height: 1.15; padding: 0 10px; margin-bottom: 45px; }
+    .section-title + .section-sub { margin-top: -35px; margin-bottom: 40px; }
+    .section-sub { font-size: 0.8rem; letter-spacing: 3px; }
+    #galeria { padding-top: 100px; }
 
     /* Video */
     .video-section { padding: 50px 12px; }
@@ -1196,13 +1204,34 @@
     }
   });
 
-  // Botón "Sigue Pig" → desbloquea y reproduce video con sonido GARANTIZADO
+  // === Segunda broma: "Sigue Pig" se presiona 3 veces antes de desbloquear ===
+  let pigCount = 0;
+  const mensajesPig = [
+    '¡Eh eh! ¿Tan rápido? 🙄',
+    'Mmm, todavía no pig 🐷',
+    'Ya la última... prometo 🤞✨'
+  ];
+
   unlockBtn.addEventListener('click', async () => {
+    pigCount++;
+
+    // Los primeros 3 clicks NO desbloquean — solo muestran mensaje de broma
+    if (pigCount < 4) {
+      mostrarMensaje(mensajesPig[pigCount - 1]);
+      // Animar el botón "rebotando"
+      unlockBtn.style.transform = 'scale(0.92) rotate(-3deg)';
+      setTimeout(() => { unlockBtn.style.transform = ''; }, 250);
+      // Hacer el bebé girar un poquito
+      const babyImg = document.querySelector('.baby-img');
+      babyImg.style.transform = 'rotate(' + (pigCount * 5) + 'deg)';
+      return;
+    }
+
+    // Al 4to click SÍ desbloquea y reproduce video con sonido garantizado
     babyModal.classList.remove('show');
     document.body.classList.remove('locked');
     scrollHint.style.display = 'none';
 
-    // Scrollear al video
     setTimeout(() => {
       document.getElementById('video').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
@@ -1217,14 +1246,13 @@
         videoOverlay.classList.remove('show');
         audioBtn.classList.remove('show');
       } catch(e) {
-        // Si el navegador aún bloquea el audio, mostrar botón
         audioBtn.classList.add('show');
         videoOverlay.classList.add('show');
       }
     }, 1000);
   });
 
-  // Click en la imagen del bebé también funciona como "Sigue Pig"
+  // Click en la imagen del bebé también cuenta como click al botón
   document.querySelector('.baby-img').addEventListener('click', () => {
     unlockBtn.click();
   });
