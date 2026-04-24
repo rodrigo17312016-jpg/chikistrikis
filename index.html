@@ -391,8 +391,8 @@
   .video-wrap {
     position: relative;
     width: 100%;
-    max-width: clamp(320px, 45vw, 460px);
-    max-height: 85vh;
+    max-width: clamp(300px, 42vw, 420px);
+    max-height: 78vh;
     aspect-ratio: 9 / 16;
     margin: 0 auto;
     border-radius: 28px;
@@ -776,8 +776,8 @@
     /* Video - VERTICAL en móvil, ocupa más espacio */
     .video-section { padding: 50px 12px; }
     .video-wrap {
-      max-width: min(78vw, 380px);
-      max-height: 80vh;
+      max-width: min(74vw, 345px);
+      max-height: 74vh;
       border-radius: 22px;
       box-shadow:
         0 20px 50px rgba(0,0,0,0.6),
@@ -1661,42 +1661,54 @@
     }
   }
 
+  // Control: el show se ejecuta SOLO UNA VEZ automáticamente
+  let fwShownOnce = false;
+  const MAX_FIREWORKS = 8; // límite para evitar acumulación
+
   function iniciarShow() {
-    if (fwActive) return;
+    if (fwShownOnce) return; // SOLO UNA VEZ
+    fwShownOnce = true;
     fwActive = true;
     resizeFwCanvas();
     animateFireworks();
-    // Explosión inicial fuerte
+    // UNA SOLA explosión masiva (no loop infinito)
     explosionMasiva();
-    // Luego fuegos continuos cada 600-1100ms
-    fwInterval = setInterval(() => {
-      lanzarFirework();
-      if (Math.random() > 0.7) lanzarFirework();
-    }, 800);
+    // Auto-detener después de que terminen las animaciones
+    setTimeout(() => { fwActive = false; }, 5000);
   }
 
   function pausarShow() {
-    fwActive = false;
+    // No forzar cierre — deja que las partículas se agoten naturalmente
     if (fwInterval) { clearInterval(fwInterval); fwInterval = null; }
   }
 
-  // Se activa automáticamente al entrar al viewport de la sección final
+  // Se activa automáticamente al entrar al viewport (solo la primera vez)
   const finalObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
-      if (e.isIntersecting) {
+      if (e.isIntersecting && !fwShownOnce) {
         iniciarShow();
-      } else {
-        pausarShow();
       }
     });
   }, { threshold: 0.2 });
   finalObserver.observe(finalSection);
 
-  // Click en la torta dispara una explosión masiva extra
+  // Click en la torta dispara UNA explosión extra (sin acumular)
+  let cakeClickBusy = false;
   cakeEmoji.addEventListener('click', () => {
-    if (!fwActive) iniciarShow();
+    if (cakeClickBusy) return; // prevenir clicks rápidos seguidos
+    if (fireworks.length >= MAX_FIREWORKS) return; // no acumular
+
+    cakeClickBusy = true;
+    setTimeout(() => { cakeClickBusy = false; }, 1500); // cooldown
+
+    // Si no está activo el loop de animación, reactivarlo brevemente
+    if (!fwActive) {
+      fwActive = true;
+      animateFireworks();
+      setTimeout(() => { fwActive = false; }, 3500);
+    }
     explosionMasiva();
-    explosionMasiva();
+
     // Pequeña animación en el emoji
     cakeEmoji.style.transform = 'scale(1.4) rotate(10deg)';
     setTimeout(() => { cakeEmoji.style.transform = ''; }, 300);
