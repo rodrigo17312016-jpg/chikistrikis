@@ -200,26 +200,48 @@
     margin-bottom: 30px;
     backdrop-filter: blur(10px);
   }
-  /* "Feliz Cumpleaños" - elegante y más pequeño */
+  /* "Feliz Cumpleaños" - efecto PLATEADO brillante animado */
   .hero-title {
     font-family: 'Playfair Display', serif;
     font-size: clamp(1.6rem, 5.5vw, 2.8rem);
-    font-weight: 400;
+    font-weight: 700;
     font-style: italic;
     letter-spacing: 3px;
-    color: var(--crema);
-    opacity: 0.92;
     text-align: center;
     margin-bottom: 5px;
     text-transform: uppercase;
-    text-shadow: 0 0 20px rgba(245,196,94,0.3);
+    background: linear-gradient(
+      90deg,
+      #707070 0%,
+      #c0c0c0 20%,
+      #ffffff 40%,
+      #e8e8e8 50%,
+      #ffffff 60%,
+      #c0c0c0 80%,
+      #707070 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: silverShine 3.5s linear infinite;
+    filter: drop-shadow(0 2px 6px rgba(255,255,255,0.25));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  @keyframes silverShine {
+    0% { background-position: 200% center; }
+    100% { background-position: 0% center; }
   }
   .hero-title::before,
   .hero-title::after {
     content: '~';
-    color: var(--dorado);
+    -webkit-text-fill-color: var(--dorado);
+    background: none;
     margin: 0 15px;
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
   /* "Evenly" - femenino con animaciones */
@@ -232,36 +254,44 @@
   .hero-name {
     font-family: 'Great Vibes', cursive;
     font-size: clamp(4.5rem, 16vw, 8.5rem);
-    line-height: 1.05;
+    line-height: 1.15;
+    padding: 0 15px;
     background: linear-gradient(
       90deg,
       #ff6b9d 0%,
-      #ffb3d1 20%,
-      #ffd700 40%,
-      #ff6b9d 60%,
-      #e91e63 80%,
-      #ff6b9d 100%
+      #ffb3d1 25%,
+      #ffd700 50%,
+      #ff6b9d 75%,
+      #e91e63 100%
     );
-    background-size: 250% 100%;
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 0 25px rgba(255, 107, 157, 0.6))
-            drop-shadow(0 0 45px rgba(255, 215, 0, 0.3));
-    animation: shimmerName 5s ease-in-out infinite, gentleFloat 4s ease-in-out infinite;
+    color: transparent;
+    filter: drop-shadow(0 4px 20px rgba(255, 107, 157, 0.5));
+    animation: shimmerName 6s ease-in-out infinite, gentleFloat 5s ease-in-out infinite;
     text-align: center;
     position: relative;
     z-index: 2;
     display: inline-block;
     font-weight: 400;
+    /* Renderizado nítido */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+    will-change: transform, background-position;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   @keyframes shimmerName {
     0%, 100% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
   }
   @keyframes gentleFloat {
-    0%, 100% { transform: translateY(0) rotate(-1deg); }
-    50% { transform: translateY(-6px) rotate(1deg); }
+    0%, 100% { transform: translateY(0) translateZ(0); }
+    50% { transform: translateY(-6px) translateZ(0); }
   }
 
   /* Sparkles femeninos alrededor de Evenly */
@@ -1293,7 +1323,7 @@
   (function makeConfetti() {
     const container = document.getElementById('confetti');
     const colors = ['#f5c45e', '#ff6b9d', '#4ecdc4', '#ffe082', '#ffffff'];
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 30; i++) {
       const c = document.createElement('div');
       c.className = 'confetti';
       c.style.left = Math.random() * 100 + '%';
@@ -1650,14 +1680,12 @@
   }
 
   function animateFireworks() {
-    fctx.fillStyle = 'rgba(8, 21, 48, 0.2)';
-    fctx.fillRect(0, 0, canvas.width, canvas.height);
+    // Limpiar COMPLETAMENTE el canvas (fondo transparente real)
+    fctx.clearRect(0, 0, canvas.width, canvas.height);
     fireworks.forEach(fw => { fw.update(); fw.draw(); });
     fireworks = fireworks.filter(fw => !fw.isDone());
     if (fwActive || fireworks.length > 0) {
       animationId = requestAnimationFrame(animateFireworks);
-    } else {
-      fctx.clearRect(0, 0, canvas.width, canvas.height);
     }
   }
 
