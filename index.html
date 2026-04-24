@@ -1700,7 +1700,7 @@
       this.vx = Math.cos(angle) * speed;
       this.vy = Math.sin(angle) * speed;
       this.alpha = 1;
-      this.decay = Math.random() * 0.015 + 0.008;
+      this.decay = Math.random() * 0.025 + 0.018;
       this.size = Math.random() * 2 + 1.5;
     }
     update() {
@@ -1772,28 +1772,35 @@
       explosionMasiva();
     }
 
-    // Duración de la serie
+    // Duración de la serie: 2.5s (más corta = más loops)
     setTimeout(() => {
       fwActive = false;
       programarSiguienteSerie();
-    }, 4500);
+    }, 2500);
   }
 
   function programarSiguienteSerie() {
     if (relaunchTimer) clearTimeout(relaunchTimer);
-    // Esperar a que TODAS las partículas se despejen antes de lanzar otra serie
+    if (!finalInViewport) return;
+
+    // Esperar a que la mayoría de partículas se despejen (no todas)
     const checkClear = () => {
-      if (!finalInViewport) return; // solo si sigue visible
-      if (fireworks.length === 0) {
-        // Pausa antes de la siguiente serie
+      if (!finalInViewport) return;
+      if (fireworks.length <= 1) {
+        // Casi despejadas → lanzar pronto
         relaunchTimer = setTimeout(() => {
           if (finalInViewport) iniciarShow();
-        }, 1200);
+        }, 200);
       } else {
-        relaunchTimer = setTimeout(checkClear, 400);
+        relaunchTimer = setTimeout(checkClear, 200);
       }
     };
     checkClear();
+
+    // Safety net: máximo 4 segundos de espera, lanzar sí o sí
+    setTimeout(() => {
+      if (finalInViewport && !fwActive) iniciarShow();
+    }, 4000);
   }
 
   function pausarShow() {
