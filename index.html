@@ -446,21 +446,25 @@
   .letter-signature {
     text-align: right;
     margin-top: 30px;
+  }
+  .sig-intro {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: var(--crema);
+    opacity: 0.85;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  .sig-names {
     font-family: 'Great Vibes', cursive;
-    font-size: 2.5rem;
+    font-size: 3rem;
     background: linear-gradient(135deg, var(--dorado), var(--coral));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-  }
-  .letter-signature small {
-    display: block;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    color: var(--crema);
-    opacity: 0.7;
-    margin-top: 5px;
-    -webkit-text-fill-color: var(--crema);
+    line-height: 1.15;
+    display: inline-block;
+    filter: drop-shadow(0 0 20px rgba(245,196,94,0.3));
   }
 
   /* --- Deseos --- */
@@ -552,6 +556,19 @@
     font-style: italic;
     font-size: 1rem;
     opacity: 0.8;
+  }
+  .final-joke {
+    margin-top: 25px;
+    color: var(--coral);
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 15px rgba(255,107,157,0.4));
+    animation: wobble 3s ease-in-out infinite;
+  }
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
   }
 
   /* Navegación de puntitos */
@@ -993,8 +1010,8 @@
       El cielo es el único límite. <strong>Sigue brillando, Evenly.</strong>
     </p>
     <div class="letter-signature">
-      Rodrigo &amp; Dereck
-      <small>— Un enorme abrazo de Rodrigo y Dereck 🧒💙</small>
+      <div class="sig-intro">— Un enorme abrazo de:</div>
+      <div class="sig-names">Rodrigo &amp; Dereck 🧒💙</div>
     </div>
   </div>
 </section>
@@ -1047,6 +1064,9 @@
   <p class="final-sub reveal">
     Con mucho cariño de siempre<br>
     — Rodrigo & Dereck 💙
+  </p>
+  <p class="final-joke reveal">
+    ya estás viejita jajajaja 😆
   </p>
 </section>
 
