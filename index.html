@@ -2,13 +2,26 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="HandheldFriendly" content="true">
+<meta name="MobileOptimized" content="320">
 <title>Feliz Cumpleaños Evenly · 29</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
+  html, body {
+    touch-action: pan-y;
+    -ms-touch-action: pan-y;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
 
   :root {
     --azul-profundo: #0a1f3d;
@@ -187,17 +200,114 @@
     margin-bottom: 30px;
     backdrop-filter: blur(10px);
   }
+  /* "Feliz Cumpleaños" - elegante y más pequeño */
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5.5vw, 2.8rem);
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: 3px;
+    color: var(--crema);
+    opacity: 0.92;
+    text-align: center;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(245,196,94,0.3);
+  }
+  .hero-title::before,
+  .hero-title::after {
+    content: '~';
+    color: var(--dorado);
+    margin: 0 15px;
+    opacity: 0.7;
+  }
+
+  /* "Evenly" - femenino con animaciones */
+  .hero-name-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 30px;
+    padding: 15px 30px;
+  }
   .hero-name {
     font-family: 'Great Vibes', cursive;
-    font-size: clamp(3rem, 11vw, 6.5rem);
-    background: linear-gradient(135deg, var(--coral) 0%, var(--dorado) 50%, var(--azul-brillo) 100%);
+    font-size: clamp(4.5rem, 16vw, 8.5rem);
+    line-height: 1.05;
+    background: linear-gradient(
+      90deg,
+      #ff6b9d 0%,
+      #ffb3d1 20%,
+      #ffd700 40%,
+      #ff6b9d 60%,
+      #e91e63 80%,
+      #ff6b9d 100%
+    );
+    background-size: 250% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 0 40px rgba(245,196,94,0.4));
+    filter: drop-shadow(0 0 25px rgba(255, 107, 157, 0.6))
+            drop-shadow(0 0 45px rgba(255, 215, 0, 0.3));
+    animation: shimmerName 5s ease-in-out infinite, gentleFloat 4s ease-in-out infinite;
     text-align: center;
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    font-weight: 400;
+  }
+  @keyframes shimmerName {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-6px) rotate(1deg); }
+  }
+
+  /* Sparkles femeninos alrededor de Evenly */
+  .sparkle {
+    position: absolute;
+    font-size: 1.5rem;
+    pointer-events: none;
+    animation: sparkleFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(255,182,193,0.8));
+  }
+  .sparkle-1 { top: -5px; left: -10px; animation-delay: 0s; }
+  .sparkle-2 { top: 10px; right: -15px; animation-delay: 0.8s; font-size: 1.8rem; }
+  .sparkle-3 { bottom: 5px; left: 10px; animation-delay: 1.6s; font-size: 1.3rem; }
+  .sparkle-4 { bottom: -5px; right: 0px; animation-delay: 2.2s; }
+  .sparkle-5 { top: 45%; left: -25px; animation-delay: 1.2s; font-size: 1.4rem; }
+  .sparkle-6 { top: 50%; right: -20px; animation-delay: 0.4s; font-size: 1.4rem; }
+
+  @keyframes sparkleFloat {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0.3) rotate(0deg);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2) rotate(180deg);
+    }
+  }
+
+  /* Halo de brillo detrás de Evenly */
+  .hero-name-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 107, 157, 0.2) 0%,
+      rgba(255, 215, 0, 0.1) 40%,
+      transparent 70%
+    );
+    animation: haloPulse 4s ease-in-out infinite;
+    z-index: 1;
+    border-radius: 50%;
+  }
+  @keyframes haloPulse {
+    0%, 100% { opacity: 0.5; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.1); }
   }
   .hero-age {
     font-family: 'Playfair Display', serif;
@@ -617,10 +727,24 @@
 
     /* Hero */
     .hero { padding: 40px 18px 80px; min-height: 90vh; }
-    .hero-name {
-      font-size: clamp(3rem, 14vw, 5rem);
-      line-height: 1.05;
+    .hero-title {
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      margin-bottom: 0;
     }
+    .hero-title::before, .hero-title::after {
+      margin: 0 8px;
+    }
+    .hero-name-wrapper {
+      margin-bottom: 25px;
+      padding: 10px 15px;
+    }
+    .hero-name {
+      font-size: clamp(4rem, 17vw, 5.5rem);
+      line-height: 1;
+    }
+    .sparkle { font-size: 1.2rem !important; }
+    .sparkle-2 { font-size: 1.4rem !important; }
     .hero-message {
       font-size: 1rem;
       line-height: 1.7;
@@ -692,7 +816,8 @@
 
   /* =========== PANTALLAS MUY PEQUEÑAS (< 380px) =========== */
   @media (max-width: 380px) {
-    .hero-name { font-size: 2.5rem; }
+    .hero-title { font-size: 1.1rem; letter-spacing: 1.5px; }
+    .hero-name { font-size: 3.8rem; }
     .section-title { font-size: 1.9rem; }
     .achievements { grid-template-columns: 1fr; }
     .intro-title { font-size: 1.9rem; }
@@ -893,7 +1018,16 @@
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-name">Feliz Cumpleaños<br>Evenly</div>
+  <div class="hero-title">Feliz Cumpleaños</div>
+  <div class="hero-name-wrapper">
+    <span class="sparkle sparkle-1">✨</span>
+    <span class="sparkle sparkle-2">💖</span>
+    <span class="sparkle sparkle-5">🌸</span>
+    <div class="hero-name">Evenly</div>
+    <span class="sparkle sparkle-3">🌟</span>
+    <span class="sparkle sparkle-4">💫</span>
+    <span class="sparkle sparkle-6">🦋</span>
+  </div>
   <p class="hero-message">
     Hoy es un día para celebrar todo lo que eres,<br>
     todo lo que has logrado y todo lo que vendrá.<br>
@@ -1080,6 +1214,43 @@
 </section>
 
 <script>
+  // === BLOQUEO TOTAL DE ZOOM ===
+  // Bloquear pinch zoom (gestos en iOS Safari)
+  document.addEventListener('gesturestart', e => e.preventDefault());
+  document.addEventListener('gesturechange', e => e.preventDefault());
+  document.addEventListener('gestureend', e => e.preventDefault());
+
+  // Bloquear doble-tap para zoom en móvil
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 350) {
+      e.preventDefault();
+    }
+    lastTouchEnd = now;
+  }, { passive: false });
+
+  // Bloquear pinch con dos dedos (touchmove)
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  // Bloquear zoom con Ctrl+rueda (desktop)
+  document.addEventListener('wheel', e => {
+    if (e.ctrlKey) e.preventDefault();
+  }, { passive: false });
+
+  // Bloquear Ctrl + +/-/0 (zoom con teclado)
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) &&
+        (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0' ||
+         e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 48)) {
+      e.preventDefault();
+    }
+  });
+
   // === Estrellas ===
   (function makeStars() {
     const container = document.getElementById('stars');
