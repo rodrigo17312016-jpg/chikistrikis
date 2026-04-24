@@ -560,12 +560,104 @@
     box-shadow: 0 0 15px var(--dorado);
   }
 
-  @media (max-width: 600px) {
+  /* =========== MÓVIL (< 768px) =========== */
+  @media (max-width: 768px) {
     .dots-nav { display: none; }
-    section { padding: 70px 15px; }
-    .photo-card img { height: 280px; }
-    .letter::before { font-size: 5rem; top: 10px; left: 15px; }
+    section { padding: 60px 18px; }
+
+    /* Intro */
+    .intro-crown { font-size: 3rem; margin-bottom: 15px; }
+    .intro-title { font-size: 2.2rem; line-height: 1.15; }
+    .intro-sub { font-size: 0.95rem; margin-bottom: 30px; padding: 0 10px; }
+    .intro-btn { padding: 15px 40px; font-size: 1rem; letter-spacing: 1.5px; }
+    .hint { font-size: 0.75rem; padding: 0 20px; }
+
+    /* Hero */
+    .hero { padding: 40px 18px 80px; min-height: 90vh; }
+    .hero-name {
+      font-size: clamp(3rem, 14vw, 5rem);
+      line-height: 1.05;
+    }
+    .hero-message {
+      font-size: 1rem;
+      line-height: 1.7;
+      padding: 0 5px;
+    }
+    .scroll-hint { font-size: 0.75rem; bottom: 20px; }
+    .scroll-hint .arrow { font-size: 1.2rem; }
+
+    /* Section títulos */
+    .section-title { font-size: 2.2rem; line-height: 1.15; padding: 0 10px; }
+    .section-sub { font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 35px; }
+
+    /* Video */
+    .video-section { padding: 50px 12px; }
+    .video-wrap {
+      border-radius: 18px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 0 2px var(--dorado);
+    }
+    .video-overlay-msg {
+      font-size: 0.75rem;
+      padding: 8px 18px;
+      bottom: 12px;
+      letter-spacing: 1px;
+    }
+    .video-caption { font-size: 0.9rem; margin-top: 20px; padding: 0 15px; }
+
+    /* Galería */
+    .gallery { gap: 20px; grid-template-columns: 1fr; }
+    .photo-card img { height: 320px; }
+    .photo-caption { padding: 18px 15px; }
+    .photo-caption h3 { font-size: 1.05rem; }
+    .photo-caption p { font-size: 0.85rem; }
+
+    /* Logros */
+    .achievements {
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .achievement-card { padding: 25px 15px; }
+    .achievement-icon { font-size: 2.2rem; margin-bottom: 10px; }
+    .achievement-card h3 { font-size: 1rem; }
+    .achievement-card p { font-size: 0.82rem; line-height: 1.5; }
+
+    /* Carta */
+    .letter { padding: 35px 22px; }
+    .letter::before { font-size: 4rem; top: 5px; left: 12px; }
+    .letter p { font-size: 0.95rem; line-height: 1.8; margin-bottom: 16px; }
+    .letter-signature { font-size: 2rem; }
+    .letter-signature small { font-size: 0.8rem; }
+
+    /* Deseos */
+    .wishes { grid-template-columns: 1fr; gap: 14px; }
+    .wish { padding: 22px 20px; }
+    .wish-emoji { font-size: 1.8rem; }
+    .wish h4 { font-size: 1.05rem; }
+    .wish p { font-size: 0.88rem; }
+
+    /* Final */
+    .final { padding: 80px 18px 60px; }
+    .final-heart { font-size: 3rem; }
+    .final-text { font-size: 2.2rem; line-height: 1.25; }
+    .final-sub { font-size: 0.9rem; }
+
+    /* Audio btn más pequeño en móvil */
+    .audio-btn { width: 48px; height: 48px; font-size: 1.3rem; bottom: 15px; right: 15px; }
   }
+
+  /* =========== PANTALLAS MUY PEQUEÑAS (< 380px) =========== */
+  @media (max-width: 380px) {
+    .hero-name { font-size: 2.5rem; }
+    .section-title { font-size: 1.9rem; }
+    .achievements { grid-template-columns: 1fr; }
+    .intro-title { font-size: 1.9rem; }
+    .letter { padding: 28px 18px; }
+    .letter p { font-size: 0.9rem; }
+    .final-text { font-size: 1.9rem; }
+  }
+
+  /* Evitar overflow horizontal en cualquier pantalla */
+  body, html { max-width: 100vw; overflow-x: hidden; }
 
   /* Fade-in on scroll */
   .reveal {
@@ -634,7 +726,6 @@
 
 <!-- HERO -->
 <section class="hero" id="hero">
-  <div class="hero-badge">· 23 de Abril, 2026 ·</div>
   <div class="hero-name">Feliz Cumpleaños<br>Evenly</div>
   <p class="hero-message">
     Hoy es un día para celebrar todo lo que eres,<br>
@@ -649,7 +740,7 @@
 
 <!-- VIDEO -->
 <section class="video-section" id="video">
-  <h2 class="section-title reveal">Un Mensaje Para Ti</h2>
+  <h2 class="section-title reveal">Recuerdos Para Ti</h2>
   <p class="section-sub reveal">· Un Momento Divertido ·</p>
   <div class="video-wrap reveal">
     <video id="mainVideo" playsinline preload="auto" controls>
