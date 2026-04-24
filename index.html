@@ -800,23 +800,30 @@
     /* Hero */
     .hero { padding: 40px 18px 80px; min-height: 90vh; }
     .hero-title {
-      font-size: 1.3rem;
-      letter-spacing: 2px;
+      font-size: 1rem;
+      letter-spacing: 1.5px;
       margin-bottom: 0;
     }
     .hero-title::before, .hero-title::after {
-      margin: 0 8px;
+      margin: 0 6px;
     }
     .hero-name-wrapper {
-      margin-bottom: 25px;
-      padding: 10px 15px;
+      margin-top: 25px;
+      margin-bottom: 28px;
+      padding: 20px 30px;
     }
     .hero-name {
-      font-size: clamp(4rem, 17vw, 5.5rem);
-      line-height: 1;
+      font-size: clamp(3.5rem, 15vw, 5rem);
+      line-height: 1.1;
     }
-    .sparkle { font-size: 1.2rem !important; }
-    .sparkle-2 { font-size: 1.4rem !important; }
+    .sparkle { font-size: 1.1rem !important; }
+    .sparkle-2 { font-size: 1.3rem !important; }
+    .sparkle-1 { left: -18px !important; top: -5px !important; }
+    .sparkle-2 { right: -18px !important; top: -10px !important; }
+    .sparkle-3 { left: -10px !important; bottom: -5px !important; }
+    .sparkle-4 { right: -12px !important; bottom: -8px !important; }
+    .sparkle-5 { left: -25px !important; }
+    .sparkle-6 { right: -25px !important; }
     .hero-message {
       font-size: 1rem;
       line-height: 1.7;
@@ -901,8 +908,10 @@
 
   /* =========== PANTALLAS MUY PEQUEÑAS (< 380px) =========== */
   @media (max-width: 380px) {
-    .hero-title { font-size: 1.1rem; letter-spacing: 1.5px; }
-    .hero-name { font-size: 3.8rem; }
+    .hero-title { font-size: 0.9rem; letter-spacing: 1.2px; }
+    .hero-title::before, .hero-title::after { margin: 0 4px; }
+    .hero-name { font-size: 3.3rem; }
+    .hero-name-wrapper { margin-top: 22px; padding: 18px 25px; }
     .section-title { font-size: 1.9rem; }
     .achievements { grid-template-columns: 1fr; }
     .intro-title { font-size: 1.9rem; }
@@ -1484,7 +1493,9 @@
       return;
     }
 
-    // Al 4to click SÍ desbloquea y reproduce video con sonido garantizado
+    // Al 4to click SÍ desbloquea, habilita el video y lo reproduce
+    videoUnlocked = true;
+    enableVideoPlayback();
     babyModal.classList.remove('show');
     document.body.classList.remove('locked');
     scrollHint.style.display = 'none';
@@ -1514,29 +1525,39 @@
     unlockBtn.click();
   });
 
-  // === Reproducir video al entrar al viewport ===
-  const videoObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        video.muted = false;
-        video.volume = 1;
-        const p = video.play();
-        if (p !== undefined) {
-          p.then(() => {
-            videoOverlay.classList.remove('show');
-            audioBtn.classList.remove('show');
-          }).catch(() => {
-            // Autoplay con sonido bloqueado: mostrar botón
-            videoOverlay.classList.add('show');
-            audioBtn.classList.add('show');
-          });
+  // === Control del video: SOLO se reproduce después de SIGUE PIG x4 ===
+  let videoUnlocked = false;
+  let videoObserver = null;
+
+  function enableVideoPlayback() {
+    if (videoObserver) return;
+    videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!videoUnlocked) return;
+        if (entry.isIntersecting) {
+          video.muted = false;
+          video.volume = 1;
+          const p = video.play();
+          if (p !== undefined) {
+            p.then(() => {
+              videoOverlay.classList.remove('show');
+              audioBtn.classList.remove('show');
+            }).catch(() => {
+              videoOverlay.classList.add('show');
+              audioBtn.classList.add('show');
+            });
+          }
+        } else {
+          video.pause();
         }
-      } else {
-        video.pause();
-      }
-    });
-  }, { threshold: 0.5 });
-  videoObserver.observe(video);
+      });
+    }, { threshold: 0.5 });
+    videoObserver.observe(video);
+  }
+
+  // Asegurar que el video NO se reproduzca antes
+  video.pause();
+  video.currentTime = 0;
 
   // Click en overlay del video para activar sonido
   videoOverlay.addEventListener('click', async () => {
