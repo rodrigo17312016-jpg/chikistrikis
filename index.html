@@ -1749,15 +1749,15 @@
     }
   }
 
-  // Control: el show se ejecuta una vez por visita al final
-  let fwShownOnce = false;
-  const MAX_FIREWORKS = 8;
+  // Control: series REPETIDAS sin acumular — espera que se despejen las partículas
+  const MAX_FIREWORKS = 10;
+  let finalInViewport = false;
+  let relaunchTimer = null;
 
   function iniciarShow() {
-    if (fwShownOnce) return;
-    fwShownOnce = true;
+    if (fwActive) return; // no lanzar si ya hay una serie en progreso
     fwActive = true;
-    // Forzar resize con reintentos si el canvas aún no tiene dimensiones
+
     resizeFwCanvas();
     if (!canvas.width || !canvas.height) {
       setTimeout(() => {
@@ -1767,35 +1767,63 @@
         explosionMasiva();
       }, 150);
     } else {
+      if (animationId) cancelAnimationFrame(animationId);
       animateFireworks();
       explosionMasiva();
     }
-    // Auto-detener después de 5s pero dejar que las partículas se agoten
-    setTimeout(() => { fwActive = false; }, 5500);
+
+    // Duración de la serie
+    setTimeout(() => {
+      fwActive = false;
+      programarSiguienteSerie();
+    }, 4500);
+  }
+
+  function programarSiguienteSerie() {
+    if (relaunchTimer) clearTimeout(relaunchTimer);
+    // Esperar a que TODAS las partículas se despejen antes de lanzar otra serie
+    const checkClear = () => {
+      if (!finalInViewport) return; // solo si sigue visible
+      if (fireworks.length === 0) {
+        // Pausa antes de la siguiente serie
+        relaunchTimer = setTimeout(() => {
+          if (finalInViewport) iniciarShow();
+        }, 1200);
+      } else {
+        relaunchTimer = setTimeout(checkClear, 400);
+      }
+    };
+    checkClear();
   }
 
   function pausarShow() {
-    if (fwInterval) { clearInterval(fwInterval); fwInterval = null; }
+    fwActive = false;
+    if (relaunchTimer) { clearTimeout(relaunchTimer); relaunchTimer = null; }
   }
 
-  // Observer con threshold más bajo para activar antes
+  // Observer — activa/desactiva según viewport
   const finalObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => {
+      finalInViewport = e.isIntersecting;
       if (e.isIntersecting) {
         iniciarShow();
+      } else {
+        pausarShow();
       }
     });
   }, { threshold: 0.05, rootMargin: '0px 0px -100px 0px' });
   finalObserver.observe(finalSection);
 
-  // Backup: también escuchar scroll por si el Observer falla
-  let scrollFwChecked = false;
+  // Backup: scroll listener por si el Observer falla en móviles
   window.addEventListener('scroll', () => {
-    if (scrollFwChecked || fwShownOnce) return;
     const rect = finalSection.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 0.9 && rect.bottom > 0) {
-      scrollFwChecked = true;
+    const visible = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+    if (visible && !finalInViewport) {
+      finalInViewport = true;
       iniciarShow();
+    } else if (!visible && finalInViewport) {
+      finalInViewport = false;
+      pausarShow();
     }
   }, { passive: true });
 
