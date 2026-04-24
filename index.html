@@ -811,29 +811,6 @@
     box-shadow: 0 15px 40px rgba(245,196,94,0.7);
   }
 
-  /* Click counter badge */
-  .click-badge {
-    position: absolute;
-    top: -12px;
-    right: -12px;
-    background: var(--coral);
-    color: white;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.85rem;
-    box-shadow: 0 3px 10px rgba(255,107,157,0.6);
-    animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1);
-  }
-  @keyframes popIn {
-    from { transform: scale(0); }
-    to { transform: scale(1); }
-  }
-
   /* Audio control */
   .audio-btn {
     position: fixed;
@@ -897,7 +874,7 @@
     <strong style="color:var(--dorado-suave);">Que lo pases muy bonito durante tu día.</strong> 🎂
   </p>
   <div class="scroll-hint" id="scrollHint">
-    DESLIZA HACIA ABAJO
+    PRESIONA PARA BAJAR
     <span class="arrow">↓</span>
   </div>
 </section>
@@ -1161,18 +1138,6 @@
     msgTimeout = setTimeout(() => floatMsg.classList.remove('show'), 1800);
   }
 
-  function agregarContador() {
-    const existing = scrollHint.querySelector('.click-badge');
-    if (existing) existing.remove();
-    if (clickCount > 0 && clickCount < 5) {
-      const badge = document.createElement('span');
-      badge.className = 'click-badge';
-      badge.textContent = clickCount + '/5';
-      scrollHint.style.position = 'absolute';
-      scrollHint.appendChild(badge);
-    }
-  }
-
   function handleIntentoScroll(e) {
     if (!document.body.classList.contains('locked')) return;
     if (e) { e.preventDefault(); e.stopPropagation(); }
@@ -1181,10 +1146,8 @@
 
     if (clickCount < 5) {
       mostrarMensaje(mensajesBroma[clickCount - 1]);
-      agregarContador();
     } else if (clickCount === 5) {
       mostrarMensaje(mensajesBroma[4]);
-      agregarContador();
       setTimeout(() => {
         babyModal.classList.add('show');
       }, 1500);
@@ -1225,9 +1188,6 @@
     setTimeout(() => {
       document.getElementById('video').scrollIntoView({ behavior: 'smooth' });
     }, 400);
-    // Limpiar badge
-    const badge = scrollHint.querySelector('.click-badge');
-    if (badge) badge.remove();
     scrollHint.style.display = 'none';
   });
 
