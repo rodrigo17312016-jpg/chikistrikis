@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Feliz Cumpleaños Evenly · 29</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --azul-profundo: #0a1f3d;
+    --azul-noche: #081530;
+    --azul-toga: #1e56a0;
+    --azul-brillo: #4ecdc4;
+    --dorado: #f5c45e;
+    --dorado-suave: #ffe082;
+    --coral: #ff6b9d;
+    --crema: #fff9f0;
+    --blanco-puro: #ffffff;
+  }
+
+  html, body {
+    width: 100%;
+    overflow-x: hidden;
+    background: var(--azul-noche);
+    color: var(--crema);
+    font-family: 'Poppins', sans-serif;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: radial-gradient(ellipse at top, #153264 0%, #081530 60%, #03060f 100%);
+    min-height: 100vh;
+  }
+
+  /* --- Estrellas de fondo --- */
+  .stars, .stars2, .stars3 {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    opacity: 0;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  /* --- Confetti --- */
+  .confetti-layer {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+  }
+  .confetti {
+    position: absolute;
+    width: 10px; height: 14px;
+    top: -20px;
+    animation: fall linear infinite;
+    opacity: 0.9;
+  }
+  @keyframes fall {
+    0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* ==================== PANTALLA DE INICIO ==================== */
+  .intro-screen {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #1a3a6b 0%, #081530 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    transition: opacity 1.2s ease, visibility 1.2s ease;
+  }
+  .intro-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .intro-crown {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px var(--dorado));
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
+  }
+  .intro-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 8vw, 4rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--dorado) 0%, var(--dorado-suave) 50%, var(--coral) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .intro-sub {
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    color: var(--crema);
+    opacity: 0.85;
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+  .intro-btn {
+    padding: 18px 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--azul-noche);
+    background: linear-gradient(135deg, var(--dorado) 0%, var(--dorado-suave) 100%);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 40px rgba(245,196,94,0.5), 0 0 60px rgba(245,196,94,0.3);
+    transition: all 0.4s cubic-bezier(.34,1.56,.64,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .intro-btn:hover, .intro-btn:active {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 15px 50px rgba(245,196,94,0.7), 0 0 80px rgba(245,196,94,0.5);
+  }
+  .intro-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shine 3s infinite;
+  }
+  @keyframes shine {
+    to { left: 100%; }
+  }
+  .hint {
+    margin-top: 25px;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    color: var(--dorado-suave);
+  }
+
+  /* ==================== HERO (Título principal) ==================== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    position: relative;
+    z-index: 3;
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    background: rgba(245,196,94,0.15);
+    border: 1px solid var(--dorado);
+    border-radius: 50px;
+    font-size: 0.85rem;
+    color: var(--dorado-suave);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    backdrop-filter: blur(10px);
+  }
+  .hero-name {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(4rem, 15vw, 8rem);
+    background: linear-gradient(135deg, var(--coral) 0%, var(--dorado) 50%, var(--azul-brillo) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 40px rgba(245,196,94,0.4));
+  }
+  .hero-age {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 900;
+    color: var(--dorado);
+    letter-spacing: 8px;
+    margin: 20px 0;
+    text-shadow: 0 0 30px rgba(245,196,94,0.5);
+  }
+  .hero-message {
+    max-width: 600px;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+    color: var(--crema);
+    opacity: 0.9;
+    line-height: 1.8;
+    margin-top: 20px;
+    font-weight: 300;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--dorado-suave);
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    animation: floatDown 2s ease-in-out infinite;
+    text-align: center;
+  }
+  .scroll-hint .arrow {
+    display: block;
+    font-size: 1.5rem;
+    margin-top: 5px;
+  }
+  @keyframes floatDown {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+    50% { transform: translateX(-50%) translateY(10px); opacity: 1; }
+  }
+
+  /* ==================== SECCIONES ==================== */
+  section {
+    padding: 100px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 3;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700;
+    text-align: center;
+    background: linear-gradient(135deg, var(--dorado) 0%, var(--coral) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--azul-brillo);
+    font-size: 1rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+    opacity: 0.85;
+  }
+
+  /* --- Sección Video --- */
+  .video-section {
+    padding: 60px 15px;
+  }
+  .video-wrap {
+    position: relative;
+    max-width: 850px;
+    margin: 0 auto;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.5),
+      0 0 0 2px var(--dorado),
+      0 0 60px rgba(245,196,94,0.3);
+    background: #000;
+    aspect-ratio: 16/9;
+  }
+  .video-wrap video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+  .video-overlay-msg {
+    position: absolute;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(245,196,94,0.95);
+    color: var(--azul-noche);
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 10;
+  }
+  .video-overlay-msg.show {
+    opacity: 1;
+  }
+  .video-caption {
+    text-align: center;
+    margin-top: 30px;
+    font-style: italic;
+    color: var(--dorado-suave);
+    font-size: 1rem;
+    opacity: 0.85;
+  }
+
+  /* --- Galería de fotos --- */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+  }
+  .photo-card {
+    background: linear-gradient(135deg, rgba(30,86,160,0.3), rgba(8,21,48,0.6));
+    border: 1px solid rgba(245,196,94,0.3);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all 0.5s cubic-bezier(.34,1.56,.64,1);
+    cursor: pointer;
+  }
+  .photo-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6), 0 0 40px rgba(245,196,94,0.3);
+    border-color: var(--dorado);
+  }
+  .photo-card img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-caption {
+    padding: 20px;
+    text-align: center;
+  }
+  .photo-caption h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--dorado);
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+  .photo-caption p {
+    color: var(--crema);
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-style: italic;
+  }
+
+  /* --- Logros --- */
+  .achievements {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+  }
+  .achievement-card {
+    background: linear-gradient(135deg, rgba(245,196,94,0.08), rgba(78,205,196,0.05));
+    border: 1px solid rgba(245,196,94,0.2);
+    border-radius: 18px;
+    padding: 35px 25px;
+    text-align: center;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
+  }
+  .achievement-card:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(135deg, rgba(245,196,94,0.15), rgba(78,205,196,0.1));
+    box-shadow: 0 15px 40px rgba(245,196,94,0.2);
+  }
+  .achievement-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+    animation: swing 3s ease-in-out infinite;
+  }
+  @keyframes swing {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+  }
+  .achievement-card h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--dorado);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  .achievement-card p {
+    color: var(--crema);
+    font-size: 0.95rem;
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+
+  /* --- Carta / Mensaje --- */
+  .letter {
+    background: linear-gradient(135deg, rgba(255,249,240,0.03), rgba(245,196,94,0.05));
+    border: 1px solid rgba(245,196,94,0.25);
+    border-radius: 20px;
+    padding: clamp(30px, 6vw, 60px);
+    backdrop-filter: blur(15px);
+    position: relative;
+  }
+  .letter::before {
+    content: '"';
+    position: absolute;
+    top: 20px; left: 25px;
+    font-family: 'Playfair Display', serif;
+    font-size: 7rem;
+    color: var(--dorado);
+    opacity: 0.2;
+    line-height: 1;
+  }
+  .letter p {
+    font-size: clamp(1rem, 2.5vw, 1.15rem);
+    line-height: 2;
+    color: var(--crema);
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+  .letter p strong {
+    color: var(--dorado);
+    font-weight: 600;
+  }
+  .letter .highlight {
+    color: var(--coral);
+    font-weight: 600;
+    font-style: italic;
+  }
+  .letter-signature {
+    text-align: right;
+    margin-top: 30px;
+    font-family: 'Great Vibes', cursive;
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--dorado), var(--coral));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .letter-signature small {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    color: var(--crema);
+    opacity: 0.7;
+    margin-top: 5px;
+    -webkit-text-fill-color: var(--crema);
+  }
+
+  /* --- Deseos --- */
+  .wishes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .wish {
+    padding: 30px 25px;
+    background: linear-gradient(135deg, rgba(78,205,196,0.08), rgba(255,107,157,0.05));
+    border-left: 4px solid var(--dorado);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+  }
+  .wish:hover {
+    transform: translateX(5px);
+    border-left-width: 8px;
+    background: linear-gradient(135deg, rgba(78,205,196,0.15), rgba(255,107,157,0.1));
+  }
+  .wish-emoji {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .wish h4 {
+    color: var(--dorado-suave);
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .wish p {
+    color: var(--crema);
+    font-size: 0.95rem;
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+
+  /* --- Final --- */
+  .final {
+    text-align: center;
+    padding: 120px 20px 80px;
+  }
+  .final-heart {
+    font-size: 4rem;
+    animation: heartBeat 1.5s ease-in-out infinite;
+    display: inline-block;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px var(--coral));
+  }
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25%, 75% { transform: scale(1.15); }
+    50% { transform: scale(0.95); }
+  }
+  .final-text {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    background: linear-gradient(135deg, var(--dorado), var(--coral), var(--azul-brillo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.3;
+    margin-bottom: 20px;
+  }
+  .final-sub {
+    color: var(--dorado-suave);
+    font-style: italic;
+    font-size: 1rem;
+    opacity: 0.8;
+  }
+
+  /* Navegación de puntitos */
+  .dots-nav {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(245,196,94,0.3);
+    border: 1px solid var(--dorado);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .dot.active {
+    background: var(--dorado);
+    transform: scale(1.4);
+    box-shadow: 0 0 15px var(--dorado);
+  }
+
+  @media (max-width: 600px) {
+    .dots-nav { display: none; }
+    section { padding: 70px 15px; }
+    .photo-card img { height: 280px; }
+    .letter::before { font-size: 5rem; top: 10px; left: 15px; }
+  }
+
+  /* Fade-in on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s cubic-bezier(.25,.8,.25,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Audio control */
+  .audio-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--dorado), var(--dorado-suave));
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(245,196,94,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    z-index: 100;
+    transition: all 0.3s;
+  }
+  .audio-btn.show { display: flex; }
+  .audio-btn:hover { transform: scale(1.1); }
+</style>
+</head>
+<body>
+
+<!-- Estrellas de fondo -->
+<div class="stars" id="stars"></div>
+
+<!-- Confetti -->
+<div class="confetti-layer" id="confetti"></div>
+
+<!-- Pantalla de inicio -->
+<div class="intro-screen" id="intro">
+  <div class="intro-crown">👑</div>
+  <h1 class="intro-title">Una Sorpresa<br>Para Ti, Evenly</h1>
+  <p class="intro-sub">Preparé algo muy especial para tu día...</p>
+  <button class="intro-btn" id="startBtn">Comenzar ✨</button>
+  <p class="hint">Sube el volumen 🔊 y desliza lento</p>
+</div>
+
+<!-- Navegación lateral -->
+<div class="dots-nav" id="dotsNav">
+  <div class="dot active" data-target="hero"></div>
+  <div class="dot" data-target="video"></div>
+  <div class="dot" data-target="galeria"></div>
+  <div class="dot" data-target="logros"></div>
+  <div class="dot" data-target="carta"></div>
+  <div class="dot" data-target="deseos"></div>
+  <div class="dot" data-target="final"></div>
+</div>
+
+<!-- Botón de audio -->
+<button class="audio-btn" id="audioBtn" title="Activar sonido">🔊</button>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-badge">· 23 de Abril, 2026 ·</div>
+  <div class="hero-name">Evenly</div>
+  <div class="hero-age">29</div>
+  <p class="hero-message">
+    Hoy es un día para celebrar todo lo que eres,<br>
+    todo lo que has logrado y todo lo que vendrá. 🎂
+  </p>
+  <div class="scroll-hint">
+    DESLIZA HACIA ABAJO
+    <span class="arrow">↓</span>
+  </div>
+</section>
+
+<!-- VIDEO -->
+<section class="video-section" id="video">
+  <h2 class="section-title reveal">Un Mensaje Para Ti</h2>
+  <p class="section-sub reveal">· Dale Play ·</p>
+  <div class="video-wrap reveal">
+    <video id="mainVideo" playsinline preload="auto" controls>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay-msg" id="videoOverlay">🔊 TOCA PARA ACTIVAR SONIDO</div>
+  </div>
+  <p class="video-caption reveal">Un pequeño recuerdo de momentos especiales ✨</p>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria">
+  <h2 class="section-title reveal">Momentos Que Importan</h2>
+  <p class="section-sub reveal">· Recuerdos ·</p>
+  <div class="gallery">
+    <div class="photo-card reveal">
+      <img src="graduacion.png" alt="Evenly en su graduación como Trabajadora Social">
+      <div class="photo-caption">
+        <h3>🎓 Tu Graduación</h3>
+        <p>Ese día te convertiste en Trabajadora Social. Estuve ahí, orgulloso de ti.</p>
+      </div>
+    </div>
+    <div class="photo-card reveal">
+      <img src="evenly_dereck.jpeg" alt="Evenly con Dereck">
+      <div class="photo-caption">
+        <h3>👩‍👦 Tú y Nuestro Dereck</h3>
+        <p>La mejor mamá del mundo con nuestro pequeño guerrerito de 2 años.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGROS -->
+<section id="logros">
+  <h2 class="section-title reveal">Todo Lo Que Has Logrado</h2>
+  <p class="section-sub reveal">· Una Mujer Imparable ·</p>
+  <div class="achievements">
+    <div class="achievement-card reveal">
+      <span class="achievement-icon">🎓</span>
+      <h3>Trabajadora Social</h3>
+      <p>Luchaste por tu título y lo lograste. Una profesional con vocación de ayudar.</p>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-icon">💼</span>
+      <h3>Profesional Dedicada</h3>
+      <p>Das lo mejor de ti en cada trabajo, con responsabilidad y corazón.</p>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-icon">👩‍👦</span>
+      <h3>Mamá Ejemplar</h3>
+      <p>Criar a Dereck con tanto amor y entrega es tu logro más grande.</p>
+    </div>
+    <div class="achievement-card reveal">
+      <span class="achievement-icon">💪</span>
+      <h3>Mujer Fuerte</h3>
+      <p>Has enfrentado todo con valentía y sigues caminando hacia adelante.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CARTA -->
+<section id="carta">
+  <h2 class="section-title reveal">Una Carta Sincera</h2>
+  <p class="section-sub reveal">· Con Respeto Y Cariño ·</p>
+  <div class="letter reveal">
+    <p>
+      <strong>Evenly,</strong>
+    </p>
+    <p>
+      Hoy cumples <strong>29 años</strong> y quería tomarme este momento para decirte,
+      desde la sinceridad más honesta, lo mucho que te admiro como persona.
+    </p>
+    <p>
+      Compartimos <span class="highlight">8 años</span> de nuestras vidas, y aunque hoy
+      nuestros caminos como pareja tomaron rumbos diferentes, eso nunca borrará todo lo bueno
+      que construimos, ni cambiará el hecho de que fuiste, eres y seguirás siendo alguien
+      muy importante en mi historia.
+    </p>
+    <p>
+      Como pareja cometimos errores —los dos—, pero así es la vida. Lo que <span class="highlight">sí tiene
+      que funcionar y funcionará siempre</span> es lo que somos como padres de
+      <strong>nuestro pequeño Dereck</strong>. Él merece lo mejor de ambos, y tú se lo das todos los días.
+    </p>
+    <p>
+      Te felicito por cada meta que alcanzaste: por tu <strong>título como Trabajadora Social</strong>,
+      por ser una profesional íntegra, por ser una mujer que no se rinde, por ser esa <strong>mamá
+      entregada</strong> que Dereck tiene la suerte de tener.
+    </p>
+    <p>
+      Te deseo lo mejor del mundo en este nuevo año de vida. Que se cumplan todos tus sueños,
+      que sigas creciendo personal y profesionalmente, y sobre todo —porque es lo más importante—
+      que tengas <span class="highlight">mucha, mucha salud</span> para ti y para nuestro pequeñín.
+    </p>
+    <p>
+      El cielo es el único límite. Sigue brillando, Evenly.
+    </p>
+    <div class="letter-signature">
+      Rodrigo
+      <small>— Y un abrazo enorme de Dereck 🧒💙</small>
+    </div>
+  </div>
+</section>
+
+<!-- DESEOS -->
+<section id="deseos">
+  <h2 class="section-title reveal">Mis Deseos Para Ti</h2>
+  <p class="section-sub reveal">· En Este Nuevo Año ·</p>
+  <div class="wishes">
+    <div class="wish reveal">
+      <span class="wish-emoji">💖</span>
+      <h4>Mucha Salud</h4>
+      <p>Lo primero y lo más importante: salud para ti y para Dereck, siempre.</p>
+    </div>
+    <div class="wish reveal">
+      <span class="wish-emoji">🚀</span>
+      <h4>Éxito Profesional</h4>
+      <p>Que cada meta laboral que te propongas la alcances con creces.</p>
+    </div>
+    <div class="wish reveal">
+      <span class="wish-emoji">😊</span>
+      <h4>Felicidad Plena</h4>
+      <p>Que cada día te despiertes con motivos para sonreír.</p>
+    </div>
+    <div class="wish reveal">
+      <span class="wish-emoji">🌱</span>
+      <h4>Crecimiento Personal</h4>
+      <p>Que sigas siendo esa mujer fuerte, valiente e imparable que eres.</p>
+    </div>
+    <div class="wish reveal">
+      <span class="wish-emoji">🕊️</span>
+      <h4>Paz y Tranquilidad</h4>
+      <p>Paz en tu corazón y tranquilidad en cada paso que des.</p>
+    </div>
+    <div class="wish reveal">
+      <span class="wish-emoji">✨</span>
+      <h4>Sueños Cumplidos</h4>
+      <p>Que todos los proyectos que tengas en mente se hagan realidad.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final" id="final">
+  <div class="final-heart">🎂</div>
+  <div class="final-text reveal">
+    Feliz Cumpleaños,<br>Evenly
+  </div>
+  <p class="final-sub reveal">
+    Con el respeto y cariño de siempre<br>
+    — Rodrigo & Dereck 💙
+  </p>
+</section>
+
+<script>
+  // === Estrellas ===
+  (function makeStars() {
+    const container = document.getElementById('stars');
+    const count = 80;
+    for (let i = 0; i < count; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2.5 + 0.5;
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.setProperty('--dur', (Math.random() * 4 + 2) + 's');
+      s.style.animationDelay = (Math.random() * 5) + 's';
+      container.appendChild(s);
+    }
+  })();
+
+  // === Confetti ===
+  (function makeConfetti() {
+    const container = document.getElementById('confetti');
+    const colors = ['#f5c45e', '#ff6b9d', '#4ecdc4', '#ffe082', '#ffffff'];
+    for (let i = 0; i < 60; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      c.style.animationDelay = (Math.random() * 8) + 's';
+      if (Math.random() > 0.5) c.style.borderRadius = '50%';
+      container.appendChild(c);
+    }
+  })();
+
+  // === Intro screen ===
+  const intro = document.getElementById('intro');
+  const startBtn = document.getElementById('startBtn');
+  const video = document.getElementById('mainVideo');
+  const audioBtn = document.getElementById('audioBtn');
+  const videoOverlay = document.getElementById('videoOverlay');
+  let userInteracted = false;
+
+  startBtn.addEventListener('click', async () => {
+    userInteracted = true;
+    // Pre-cargar para desbloquear el contexto de audio
+    try {
+      video.muted = false;
+      video.volume = 1;
+      await video.play();
+      video.pause();
+      video.currentTime = 0;
+    } catch(e) {
+      // Silencioso: se activará en el viewport
+    }
+    intro.classList.add('hidden');
+    setTimeout(() => intro.style.display = 'none', 1200);
+  });
+
+  // === Reproducir video al entrar al viewport ===
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        video.muted = false;
+        video.volume = 1;
+        const p = video.play();
+        if (p !== undefined) {
+          p.then(() => {
+            videoOverlay.classList.remove('show');
+            audioBtn.classList.remove('show');
+          }).catch(() => {
+            // Autoplay con sonido bloqueado: mostrar botón
+            videoOverlay.classList.add('show');
+            audioBtn.classList.add('show');
+          });
+        }
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.5 });
+  videoObserver.observe(video);
+
+  // Click en overlay del video para activar sonido
+  videoOverlay.addEventListener('click', async () => {
+    video.muted = false;
+    video.volume = 1;
+    try {
+      await video.play();
+      videoOverlay.classList.remove('show');
+      audioBtn.classList.remove('show');
+    } catch(e) {}
+  });
+  audioBtn.addEventListener('click', async () => {
+    video.muted = false;
+    video.volume = 1;
+    try {
+      await video.play();
+      audioBtn.classList.remove('show');
+      videoOverlay.classList.remove('show');
+    } catch(e) {}
+  });
+
+  // === Reveal on scroll ===
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // === Dots navigation ===
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const target = document.getElementById(dot.dataset.target);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  const sections = ['hero','video','galeria','logros','carta','deseos','final'];
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY + window.innerHeight / 2;
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const el = document.getElementById(sections[i]);
+      if (el && el.offsetTop <= scrollY) {
+        dots.forEach(d => d.classList.remove('active'));
+        const active = document.querySelector(`.dot[data-target="${sections[i]}"]`);
+        if (active) active.classList.add('active');
+        break;
+      }
+    }
+  }, { passive: true });
+</script>
+
+</body>
+</html>
