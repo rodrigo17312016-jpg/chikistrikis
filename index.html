@@ -846,7 +846,7 @@
 <div class="intro-screen" id="intro">
   <div class="intro-crown">👑</div>
   <h1 class="intro-title">Una Sorpresa<br>Para Ti, Evenly</h1>
-  <p class="intro-sub">Preparé algo muy especial para tu día...</p>
+  <p class="intro-sub">Preparé algo especial y divertido por tu día...</p>
   <button class="intro-btn" id="startBtn">Comenzar ✨</button>
   <p class="hint">Sube el volumen 🔊 y desliza lento</p>
 </div>
@@ -887,7 +887,7 @@
   <img src="bebe.webp" alt="" class="baby-img">
   <h2 class="baby-text">¿En serio quieres pasar?<br>Pues ya pasa pues 😤</h2>
   <p class="baby-sub">Ya te estás volviendo molestosa... ahora sí, adelante ✨</p>
-  <button class="baby-btn" id="unlockBtn">¡Déjame pasar! 💨</button>
+  <button class="baby-btn" id="unlockBtn">Sigue Pig 🐷</button>
 </div>
 
 <!-- VIDEO -->
@@ -1154,44 +1154,57 @@
     }
   }
 
-  // Clicks en el scroll-hint
+  // SOLO cuenta el click en el botón "PRESIONA PARA BAJAR"
   scrollHint.addEventListener('click', handleIntentoScroll);
 
-  // Intentos de scroll con la rueda del mouse (también cuentan)
+  // Bloquear cualquier intento de scroll con rueda o touch (NO cuenta, solo bloquea)
   window.addEventListener('wheel', (e) => {
-    if (document.body.classList.contains('locked') && e.deltaY > 0) {
+    if (document.body.classList.contains('locked')) {
       e.preventDefault();
-      handleIntentoScroll();
     }
   }, { passive: false });
-
-  // Intentos de scroll con touch (móvil)
-  let touchStartY = 0;
-  window.addEventListener('touchstart', (e) => {
-    touchStartY = e.touches[0].clientY;
-  }, { passive: true });
   window.addEventListener('touchmove', (e) => {
-    if (!document.body.classList.contains('locked')) return;
-    const deltaY = touchStartY - e.touches[0].clientY;
-    if (deltaY > 30) {
+    if (document.body.classList.contains('locked')) {
       e.preventDefault();
-      handleIntentoScroll();
-      touchStartY = e.touches[0].clientY;
     }
   }, { passive: false });
-
-  // Botón para desbloquear (en el modal del bebé)
-  unlockBtn.addEventListener('click', () => {
-    babyModal.classList.remove('show');
-    document.body.classList.remove('locked');
-    // Pequeño scroll automático para mostrar que se desbloqueó
-    setTimeout(() => {
-      document.getElementById('video').scrollIntoView({ behavior: 'smooth' });
-    }, 400);
-    scrollHint.style.display = 'none';
+  // También bloquear teclas de scroll
+  window.addEventListener('keydown', (e) => {
+    if (document.body.classList.contains('locked')) {
+      const blockedKeys = [' ', 'PageDown', 'PageUp', 'ArrowDown', 'ArrowUp', 'End', 'Home'];
+      if (blockedKeys.includes(e.key)) e.preventDefault();
+    }
   });
 
-  // Click en la imagen del bebé también desbloquea
+  // Botón "Sigue Pig" → desbloquea y reproduce video con sonido GARANTIZADO
+  unlockBtn.addEventListener('click', async () => {
+    babyModal.classList.remove('show');
+    document.body.classList.remove('locked');
+    scrollHint.style.display = 'none';
+
+    // Scrollear al video
+    setTimeout(() => {
+      document.getElementById('video').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
+
+    // GARANTIZAR que el video se reproduzca con sonido desde el inicio
+    setTimeout(async () => {
+      try {
+        video.currentTime = 0;
+        video.muted = false;
+        video.volume = 1;
+        await video.play();
+        videoOverlay.classList.remove('show');
+        audioBtn.classList.remove('show');
+      } catch(e) {
+        // Si el navegador aún bloquea el audio, mostrar botón
+        audioBtn.classList.add('show');
+        videoOverlay.classList.add('show');
+      }
+    }, 1000);
+  });
+
+  // Click en la imagen del bebé también funciona como "Sigue Pig"
   document.querySelector('.baby-img').addEventListener('click', () => {
     unlockBtn.click();
   });
